@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22757" systemVersion="23E224" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Exercise" representedClassName="Exercise" syncable="YES">
+        <attribute name="category" attributeType="String"/>
+        <attribute name="equipment" optional="YES" attributeType="String"/>
+        <attribute name="force" optional="YES" attributeType="String"/>
+        <attribute name="id" attributeType="String"/>
+        <attribute name="images" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData"/>
+        <attribute name="instructions" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData"/>
+        <attribute name="level" attributeType="String"/>
+        <attribute name="mechanic" optional="YES" attributeType="String"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="primaryMuscles" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData"/>
+        <attribute name="secondaryMuscles" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData"/>
+        <relationship name="singlesets" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Singleset" inverseName="exercise" inverseEntity="Singleset"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="Round" representedClassName="Round" syncable="YES" codeGenerationType="class">
+        <attribute name="rest" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="singlesets" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Singleset" inverseName="round" inverseEntity="Singleset"/>
+        <relationship name="superset" maxCount="1" deletionRule="Nullify" destinationEntity="Superset" inverseName="rounds" inverseEntity="Superset"/>
+    </entity>
+    <entity name="Singleset" representedClassName="Singleset" syncable="YES" codeGenerationType="class">
+        <attribute name="reps" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="weight" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="exercise" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Exercise" inverseName="singlesets" inverseEntity="Exercise"/>
+        <relationship name="round" maxCount="1" deletionRule="Nullify" destinationEntity="Round" inverseName="singlesets" inverseEntity="Round"/>
+    </entity>
+    <entity name="Superset" representedClassName="Superset" syncable="YES" codeGenerationType="class">
+        <relationship name="rounds" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Round" inverseName="superset" inverseEntity="Round"/>
+        <relationship name="workout" maxCount="1" deletionRule="Nullify" destinationEntity="Workout" inverseName="supersets" inverseEntity="Workout"/>
+    </entity>
+    <entity name="Workout" representedClassName="Workout" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="supersets" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Superset" inverseName="workout" inverseEntity="Superset"/>
+    </entity>
+</model>

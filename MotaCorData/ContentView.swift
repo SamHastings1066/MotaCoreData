@@ -8,17 +8,36 @@
 import SwiftUI
 
 struct ContentView: View {
+    @FetchRequest(sortDescriptors: []) private var exercises: FetchedResults<Exercise>
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        List {
+            ForEach(exercises) {exercise in
+                VStack {
+                    Text(exercise.name)
+                    Text(exercise.force ?? "None")
+                    Text(exercise.level)
+                    Text(exercise.mechanic ?? "None")
+                    Text(exercise.equipment ?? "None")
+                    Text(exercise.category)
+                    ForEach(exercise.primaryMuscles, id: \.self) { primaryMuscle in
+                        Text(primaryMuscle)
+                    }
+                    ForEach(exercise.secondaryMuscles, id: \.self) { secondaryMuscle in
+                        Text(secondaryMuscle)
+                    }
+                    ForEach(exercise.images, id: \.self) { image in
+                        Text(image)
+                    }
+                    
+                }
+            }
         }
         .padding()
     }
 }
 
 #Preview {
-    ContentView()
+    return ContentView()
+        .environment(\.managedObjectContext, CoreDataManager.preview.viewContext)
 }
