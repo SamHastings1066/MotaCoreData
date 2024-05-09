@@ -13,19 +13,13 @@ struct MotaCorDataApp: App {
     @State private var isDataLoaded = UserDefaults.standard.bool(forKey: "didPreloadData")
     let viewContext = CoreDataManager.shared.viewContext
     
+    init() {
+        if !isDataLoaded { loadData() }
+    }
     var body: some Scene {
         WindowGroup {
-            if isDataLoaded {
-                ContentView()
-                    .environment(\.managedObjectContext, viewContext)
-            } else {
-                Text("Loading")
-                    .onAppear {
-                        Task {
-                            loadData()
-                        }
-                    }
-            }
+            ContentView()
+                .environment(\.managedObjectContext, viewContext)
         }
     }
     

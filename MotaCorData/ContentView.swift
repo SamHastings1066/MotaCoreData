@@ -55,7 +55,7 @@ struct ContentView: View {
 #Preview {
     let modelData = ModelData()
     let viewContext = CoreDataManager.preview.viewContext
-    modelData.loadData(viewContext: viewContext) // Load data synchronously
+    modelData.loadData(viewContext: viewContext) 
     
     return ContentView()
         .environment(\.managedObjectContext, viewContext)
