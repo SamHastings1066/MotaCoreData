@@ -10,6 +10,21 @@ import SwiftUI
 struct ContentView: View {
     @FetchRequest(sortDescriptors: []) private var exercises: FetchedResults<Exercise>
     
+    init() {     
+        
+
+                let sampleExerciseIds = [
+                    "Barbell_Squat",
+                    "Barbell_Deadlift",
+                    "Barbell_Bench_Press_-_Medium_Grip",
+                    "Seated_Cable_Rows"
+                ]
+        _exercises = FetchRequest(
+            sortDescriptors: [],
+            predicate: NSPredicate(format: "Any id IN %@", sampleExerciseIds)
+        )
+        print("Content View initialised")
+    }
     var body: some View {
         List {
             ForEach(exercises) {exercise in
@@ -38,6 +53,11 @@ struct ContentView: View {
 }
 
 #Preview {
+    let modelData = ModelData()
+    let viewContext = CoreDataManager.preview.viewContext
+    modelData.loadData(viewContext: viewContext) // Load data synchronously
+    
     return ContentView()
-        .environment(\.managedObjectContext, CoreDataManager.preview.viewContext)
+        .environment(\.managedObjectContext, viewContext)
+    
 }

@@ -17,19 +17,17 @@ class CoreDataManager {
     
     var viewContext: NSManagedObjectContext { persistentContainer.viewContext }
     
-    let preloadedDataKey = "didPreloadData"
-    
     static var preview: CoreDataManager = {
         let manager = CoreDataManager(inMemory: true)
         return manager
     }()
     
     private init(inMemory: Bool = false) {
+        print("CoreDataManager Init Started")
         persistentContainer = NSPersistentContainer(name: "Main")
         
         if inMemory {
             persistentContainer.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
-            UserDefaults.standard.set(false, forKey: preloadedDataKey)
         }
         
         persistentContainer.loadPersistentStores { (storeDescription, error) in
@@ -42,7 +40,6 @@ class CoreDataManager {
         persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
         
 
-        preloadData(inMemory: inMemory)
 
         
     }
@@ -62,20 +59,4 @@ extension CoreDataManager {
         }
     }
 }
-
-extension CoreDataManager {
-    func preloadData(inMemory: Bool) {
-        let userDefaults = UserDefaults.standard
-        if userDefaults.bool(forKey: preloadedDataKey) == false {
-            let modelData = ModelData()
-            Task {
-                await modelData.loadData(inMemory: inMemory)
-                save()
-                print("Database saved")
-            }
-            userDefaults.set(true, forKey: preloadedDataKey)
-        }
-    }
-}
-
 
